@@ -263,29 +263,30 @@ void exibe_chaves_por_no(struct Node *t, int niv ){
 } 
 
 
-char consultaNode(struct Node *raiz, int elemento){
-  char retorno;
-  retorno ='n';
-  if(raiz != NULL){
-    if((raiz)->conteudo.cod_cliente > elemento)
-    {
-      consultaNode(raiz->left, elemento);
-    }else
-    {
-      if(raiz->conteudo.cod_cliente < elemento)
-      {
-        consultaNode(raiz->right, elemento);
-      }else 
-      {
-        if(raiz->conteudo.cod_cliente == elemento)
-          retorno = 's';
-      }
-    }
-  }else
-   retorno = 'n'; 
-   
-  return retorno;
+struct Node*  busca(struct Node * arvore, int x){
+   if (arvore == NULL)
+       return NULL;
+   if (x == arvore->conteudo.cod_cliente)
+       return arvore;
+   if (x < arvore->conteudo.cod_cliente) 
+       return busca(arvore->left, x);
+   else 
+       return busca(arvore->right, x);
 }
+
+
+
+void consultaNode(struct Node * raiz,int elemento){
+
+    struct Node * aux;
+    aux = busca(raiz, elemento);
+    if (aux == NULL)
+       printf("nao encontrado!\n");
+    else{
+       printf("Encontrado!\n");
+    }
+}
+
 
 //principal
 int main() {
@@ -308,9 +309,11 @@ int main() {
                 
             case 'c': 
                 scanf("%d", &x);
-                if (consultaNode(arvoreAVL,x)=='s') 
+				consultaNode(arvoreAVL,x);
+				
+                /*if (consultaNode(arvoreAVL,x)=='s') 
                  printf("existe no com chave:%d\n",x);   
-                else printf("nao existe no com chave:%d\n",x);     
+                else printf("nao existe no com chave:%d\n",x);   */  
                 break;
 
             case 'r':

@@ -31,7 +31,7 @@ struct Node *minValorNode(struct Node* node);
 struct Node* deletarNode(struct Node* arvores, Caixa novoconteudo);
 void liberarNode(struct Node *t);
 void printTree(struct Node *arvore, int h);
-char consultaNode(struct Node *arvore, int elemento);
+void consultaNode(struct Node *arvore, int elemento);
 void emOrdem(struct Node *arvore);
 void posOrdem(struct Node *arvore);
 void imprimeRelatorio(struct Node *arvore);
