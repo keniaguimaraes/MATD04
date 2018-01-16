@@ -199,30 +199,7 @@ void liberarNode(struct Node *t){
     }
 }
 
-//Consultar Chave na aávore
-/*char consultaNode(struct Node *arvore, int elemento){
-  char retorno;
-  retorno ='n';
-  if(arvore != NULL){
-    if((arvore)->conteudo.cod_cliente > elemento)
-    {
-      consultaNode(arvore->left, elemento);
-    }else
-    {
-      if(arvore->conteudo.cod_cliente < elemento)
-      {
-        consultaNode(arvore->right, elemento);
-      }else 
-      {
-        if(arvore->conteudo.cod_cliente == elemento)
-          retorno = 's';
-      }
-    }
-  }else
-   retorno = 'n'; 
-   
-  return retorno;
-}*/
+
 
 //Impressao em ordem
 void emOrdem(struct Node *root){
@@ -238,29 +215,44 @@ void emOrdem(struct Node *root){
 void posOrdem(struct Node *root){
     if (root != NULL){
         posOrdem(root->right);
-        printf("%d,%d,%d \n", root->conteudo.cod_cliente,root->conteudo.operacao,root->conteudo.valor);
+        printf("%d %d %d \n", root->conteudo.cod_cliente,root->conteudo.operacao,root->conteudo.valor);
         posOrdem(root->left);
    }
    
 }
 
+int contaNos(struct Node *arvore){
+   if(arvore == NULL)
+        return 0;
+   else
+        return 1 + contaNos(arvore->left) + contaNos(arvore->right);
+}
+
 //Impressao Relatorio
-void imprimeRelatorio(struct Node *arvore){
-  printf("-+- Inicio relatorio -+-");	
-  printf("-+- Fim relatorio -+-");	
+void imprimeRelatorio(struct Node *arvore ){
+
+ 
+ if(!(arvore==NULL)){
+    imprimeRelatorio (arvore->left);
+   // printf("%d %d %d\n",arvore->conteudo.cod_cliente, arvore->conteudo.operacao, arvore->conteudo.valor);
+    imprimeRelatorio (arvore->right) ;
+ }	
 }
 
 
+void exibeChavesPorNo(struct Node *arvore, int niv ){
 
-void exibe_chaves_por_no(struct Node *t, int niv ){
- printf(" nivel %d",niv);
-    if(!(t==NULL)){   
-        exibe_chaves_por_no(t->left,niv); 
-        printf(" esq %d",t->conteudo.cod_cliente);
-        exibe_chaves_por_no(t->right,niv); 
-        printf(" esq %d",t->conteudo.cod_cliente);
-     }  
-} 
+    if(!(arvore==NULL)){     
+        if (niv==1){            
+            printf("%d ",arvore->conteudo.cod_cliente);
+          
+        }else{   
+            exibeChavesPorNo(arvore->left,niv-1); 
+            exibeChavesPorNo(arvore->right,niv-1);     
+        }         
+    }  
+    printf("\n");
+}
 
 
 struct Node*  busca(struct Node * arvore, int x){
@@ -281,9 +273,9 @@ void consultaNode(struct Node * raiz,int elemento){
     struct Node * aux;
     aux = busca(raiz, elemento);
     if (aux == NULL)
-       printf("nao encontrado!\n");
+       printf("nao existe no com chave: %d\n",elemento);
     else{
-       printf("Encontrado!\n");
+       printf("existe no com chave: %d\n", elemento);
     }
 }
 
@@ -296,55 +288,65 @@ int main() {
     char op;
 	char op2[1];
 	
-    while (op !='f'){  
+   for ( ; ; )
+  {
         scanf("%c", &op);
         switch (op){
      
-            case 'i':
-                scanf("%d", &reg.cod_cliente);      
-                scanf("%d", &reg.operacao);
-                scanf("%d", &reg.valor);
-                arvoreAVL = inserir(arvoreAVL, reg);
-                break;
+            case 'i':{
+                        scanf("%d %d %d", &reg.cod_cliente,&reg.operacao, &reg.valor);     
+					   // scanf("%d", &reg.cod_cliente);     
+                        // scanf("%d", &reg.operacao);
+                       //   scanf("%d", &reg.valor);
+                        arvoreAVL = inserir(arvoreAVL, reg);
+            }
+            break;
                 
-            case 'c': 
-                scanf("%d", &x);
-				consultaNode(arvoreAVL,x);
-				
-                /*if (consultaNode(arvoreAVL,x)=='s') 
-                 printf("existe no com chave:%d\n",x);   
-                else printf("nao existe no com chave:%d\n",x);   */  
-                break;
+            case 'c': {
+                        scanf("%d", &x);
+			            consultaNode(arvoreAVL,x);}
+            break;
 
-            case 'r':
+            case 'r':{
                // printf("\nEntre com o elemento que voce gostaria de deletar: ");
-                scanf("%d", &reg.cod_cliente);
-                arvoreAVL = deletarNode(arvoreAVL, reg);
+                       scanf("%d", &reg.cod_cliente);
+                       arvoreAVL = deletarNode(arvoreAVL, reg);}
                 break;
             
-            case 'p':
-				     scanf("%s", &op2[1]);
-				     if (op2[1] == 'c')
-                        emOrdem(arvoreAVL);
-                     else 
-                        posOrdem(arvoreAVL);
+            case 'p':{
+				        scanf("%s", &op2[1]);
+				        if (op2[1] == 'c')
+                          emOrdem(arvoreAVL);
+                        else 
+                          posOrdem(arvoreAVL);
+                    }
                 break;
                      
-            case 'h':
-                printf("%d\n",altura(arvoreAVL));
+            case 'h':{
+                		printf("%d\n",altura(arvoreAVL));}
                 break;
 				
-			 case 'n':
+			 case 'n':{
                  // imprimeChaveNivelo(arvoreAVL,1);
-                scanf("%d", &x);
-                 exibe_chaves_por_no(arvoreAVL,x);
+               		    scanf("%d", &x);
+                        exibeChavesPorNo(arvoreAVL,x);}
                 break;	
 
-            case 't':
-                printf("\nImpressao da arvore\n");
-                printTree(arvoreAVL, 0);
-                break;
-                
+            case 't':{
+			            printf("\nImpressao da arvore\n");
+			            printTree(arvoreAVL, 0);
+                }break;
+           
+           
+         case 'f':{
+	
+         	    printf("-+- Inicio relatorio -+-\n");
+         	    printf("%d\n",contaNos(arvoreAVL));
+         	    imprimeRelatorio(arvoreAVL);
+         	    printf("\n-+- Fim relatorio -+-");
+		 }break;  
+		 
+		      
             default: 
                 break;
            };
