@@ -17,9 +17,6 @@ int main() {
      
             case 'i':{
                         scanf("%d %d %d", &reg.cod_cliente,&reg.operacao, &reg.valor);     
-					   // scanf("%d", &reg.cod_cliente);     
-                        // scanf("%d", &reg.operacao);
-                       //   scanf("%d", &reg.valor);
                         arvoreAVL = inserir(arvoreAVL, reg);
             }break;
                 
@@ -38,7 +35,7 @@ int main() {
 				        scanf("%s", &op2[1]);
 				        if (op2[1] == 'c')
                           emOrdem(arvoreAVL);
-                        else 
+                        else if  (op2[1] == 'd') 
                           posOrdem(arvoreAVL);
             }break;
                      
@@ -51,19 +48,15 @@ int main() {
                         exibeChavesPorNivel(arvoreAVL,x);
             }break;	
 
-           /* case 't':{
-			            printf("\nImpressao da arvore\n");
-			            printTree(arvoreAVL, 0);
-            }break;*/    
             case 'f':{
 	                     printf("-+- Inicio relatorio -+-\n");
          	             printf("%d\n",contaNos(arvoreAVL));
          	             imprimeRelatorio(arvoreAVL);
-         	            printf("-+- Fim relatorio -+-\n");
+         	             printf("-+- Fim relatorio -+-\n");
 		 }break;  
 	      
           default: 
-            break;
+          break;
        };
     };
     liberarNode(arvoreAVL);

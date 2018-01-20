@@ -13,12 +13,20 @@ int max (int a, int b){
 }
 /*Novo No*/
 struct Node* novoNode(Caixa conteudo){
-
+  	  
     struct Node* node = (struct Node*) malloc(sizeof(struct Node));
-
-    node->conteudo.cod_cliente = conteudo.cod_cliente;
+	node->conteudo.cod_cliente = conteudo.cod_cliente;
     node->conteudo.operacao = conteudo.operacao;
-    node->conteudo.valor = conteudo.valor;
+    if (conteudo.operacao==1){
+	
+      node->conteudo.valor = -conteudo.valor;
+      node ->conteudo.saldo_final =-conteudo.valor;
+    }else  {
+       node->conteudo.valor = conteudo.valor;
+       node->conteudo.saldo_final = conteudo.valor;
+    }
+    node->conteudo.operacao = conteudo.operacao;  
+	node->conteudo.qtd_operacao = 1;
     node->left = NULL;
     node->right = NULL;
     node->altura = 1;
@@ -72,7 +80,16 @@ struct Node* inserir(struct Node*node, Caixa novoconteudo){
     else if (novoconteudo.cod_cliente > node->conteudo.cod_cliente) //se o que for inserir é maior que a arvore
         node->right = inserir(node->right, novoconteudo); //inserir na direita
     else
-        return node; //quando é igual retorna arvore
+    {  //se for igual contabiliza o saldo 
+    	node->conteudo.qtd_operacao=node->conteudo.qtd_operacao+1;
+    	if (novoconteudo.operacao == 1)
+      	 node->conteudo.saldo_final=node->conteudo.saldo_final-novoconteudo.valor;
+      	else
+		 node->conteudo.saldo_final=node->conteudo.saldo_final+novoconteudo.valor; 
+    	
+        return node;	
+	}
+       
 
     node->altura = 1 + max(altura(node->left), altura(node->right)); //atualizar a altura do nó
 
@@ -198,13 +215,11 @@ void liberarNode(struct Node *arvore){
     }
 }
 
-
-
 //Impressao em ordem
 void emOrdem(struct Node *arvore){
       if (arvore != NULL){
         emOrdem(arvore->left);
-        printf("%d,%d,%d \n", arvore->conteudo.cod_cliente,arvore->conteudo.operacao,arvore->conteudo.valor);
+        printf("%d %d %d \n", arvore->conteudo.cod_cliente,arvore->conteudo.qtd_operacao, arvore->conteudo.saldo_final);
         emOrdem(arvore->right);
     }
 }
@@ -213,7 +228,7 @@ void emOrdem(struct Node *arvore){
 void posOrdem(struct Node *arvore){
     if (arvore != NULL){
         posOrdem(arvore->right);
-        printf("%d %d %d \n", arvore->conteudo.cod_cliente,arvore->conteudo.operacao,arvore->conteudo.valor);
+        printf("%d %d %d \n", arvore->conteudo.cod_cliente,arvore->conteudo.qtd_operacao, arvore->conteudo.saldo_final);
         posOrdem(arvore->left);
    }
    
@@ -229,13 +244,12 @@ int contaNos(struct Node *arvore){
 
 //Impressao Relatorio
 void imprimeRelatorio(struct Node *arvore ){
- if(!(arvore==NULL)){
+	 if(!(arvore==NULL)){
     imprimeRelatorio (arvore->left);
-    printf("%d %d %d\n",arvore->conteudo.cod_cliente, arvore->conteudo.operacao, arvore->conteudo.valor);
+    printf("%d %d %d\n",arvore->conteudo.cod_cliente,arvore->conteudo.qtd_operacao, arvore->conteudo.saldo_final );
     imprimeRelatorio (arvore->right) ;
- }	
+    }	
 }
-
 
 void exibeChavesPorNivel(struct Node *arvore, int niv ){
     if(!(arvore==NULL)){     
@@ -260,7 +274,6 @@ struct Node*  busca(struct Node *arvore, int x){
        return busca(arvore->right, x);
 }
 
-
 void consultaNode(struct Node * arvore,int elemento){
     struct Node * aux;
     aux = busca(arvore, elemento);
@@ -270,3 +283,22 @@ void consultaNode(struct Node * arvore,int elemento){
        printf("existe no com chave: %d\n", elemento);
     }
 }
+
+int consultaQtdOper(struct Node * arvore,int x){
+  int qtd;  
+   if (arvore == NULL)
+       qtd=0;
+   if (x == arvore->conteudo.cod_cliente)
+   
+   {
+   
+     qtd=qtd+1;}
+     
+   if (x < arvore->conteudo.cod_cliente) {
+        busca(arvore->left, x);
+   }else 
+        busca(arvore->right, x);
+       
+  return qtd;
+}
+
