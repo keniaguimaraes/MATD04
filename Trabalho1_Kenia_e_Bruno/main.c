@@ -4,6 +4,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+struct DadosLeitura {
+  int   codigo;
+  char  nome[30];
+  int   idade;
+  float peso;
+  float altura;	
+};
+
 //declaracao de variaveis e estruturas.
 struct Agenda {
   int   codigo;
@@ -51,6 +60,68 @@ void menu(){
    		
 }
 
+
+void insereNaLista() {
+  struct Agenda * novo, * aux;
+  struct DadosLeitura leitura;
+  
+  novo = (struct Agenda *) malloc(sizeof(struct Agenda));
+  
+  if (novo != NULL) {
+  	
+    printf("\n Informe o codigo: ");
+    scanf("%d",&leitura.codigo);
+    //printf("\n Informe o nome: ");
+   // scanf("%C",&leitura.nome); 
+    printf("\n Informe o Idade: ");
+    scanf("%d",&leitura.idade); 
+    printf("\n Informe o peso: ");
+    scanf("%f",&leitura.peso); 
+    printf("\n Informe a altura: ");
+    scanf("%f",&leitura.altura); 
+   
+    novo->codigo = leitura.codigo;
+    //novo->nome   = leitura.nome;
+    novo->peso   = leitura.peso;
+    novo->altura = leitura.altura;
+    
+	novo->anterior = NULL;
+    novo->proximo = NULL;
+
+    if (listaAgenda == NULL)
+       listaAgenda = novo;
+    else {
+      aux = listaAgenda;
+      while (aux->proximo != NULL) aux = aux->proximo;
+      aux->proximo = novo;
+      novo->anterior = aux;
+    }
+  }
+  else printf("ERRO de alocacao de memoria!");
+}
+
+
+void imprimeLista() {
+  struct Agenda * aux;
+
+  if (listaAgenda != NULL) {
+    aux = listaAgenda;
+    
+    while (aux != NULL) {
+      printf ("\n Codigo: %d", aux->codigo);
+      //printf ("\n Nome: %c", aux->nome);
+      printf ("\n Idade: %d", aux->idade);
+      printf ("\n Peso: %f",  aux->peso);
+      printf ("\n Altura: %f", aux->peso);
+      aux = aux->proximo;
+    }
+  }
+  else printf("Lista esta vazia!");
+}
+
+
+
+//progoram principal
 int main (){
 
  int opcao;
@@ -69,15 +140,14 @@ int main (){
           }break;
           
           case 2:{
-                       //inserir;
-                        getch();	
-                        menu();
+                       insereNaLista();	
+                       menu();
           }break;
           
            case 3:{
-                       //criarLista;
-                        getch();	
-                        menu();
+                       imprimeLista();
+					   getch();	
+                       menu();
           }break;
      
      
