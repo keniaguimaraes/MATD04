@@ -1,5 +1,5 @@
 //Trabalho Estrutura de Dados .
-//Alunos:Bruno Vasconcelos e Kenia Guimar√£es.
+//Alunos:Bruno Vasconcelos e Kenia Guimar„es.
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -13,7 +13,7 @@ struct DadosLeitura {
   float altura;	
 };
 
-//declaracao de variaveis e estruturas.
+//DeclaraÁ„o de variaveis e estruturas.
 struct Agenda {
   int   codigo;
   char  nome[30];
@@ -27,28 +27,14 @@ struct Agenda * listaAgenda;
 
 
 
-//Declara√ß√£o de procedimentos.
+//DeclaraÁ„o de procedimentos.
 
-//Cria a lista duplamente encadeada
+//Cria a lista
 void criaLista() {
   listaAgenda = NULL;
   printf("Lista Criada! \n");
 }
   
-  
-void destroiLista() {
-  struct Agenda * aux;
-  // percorre toda a lista e desaloca cada elemento,
-  // comecando do primeiro para o ultimo
-  // listaNumeros vai sempre apontar para o primeiro elemento
-  while (listaAgenda != NULL) {  // enquanto lista nao estive vazia
-    aux = listaAgenda;  // aux aponta para o 1o elemento da lista
-    listaAgenda = listaAgenda->proximo;  // aponta para o proximo elemento
-    free(aux);  // desaloca elemento - libera memoria
-  }
-  printf("Lista Removida!");
-}
-
 //Menu
 void menu(){
    system("cls");	
@@ -56,12 +42,11 @@ void menu(){
    printf("2- Inserir \n");	
    printf("3- Consultar \n");	
    printf("4- Remover \n");
-   printf("5- Encerrar \n");
-   		
+   printf("5- Encerrar \n");	
 }
 
-
-void insereNaLista() {
+//Insere na lista
+void insereLista() {
   struct Agenda * novo, * aux;
   struct DadosLeitura leitura;
   
@@ -71,17 +56,19 @@ void insereNaLista() {
   	
     printf("\n Informe o codigo: ");
     scanf("%d",&leitura.codigo);
-    //printf("\n Informe o nome: ");
-   // scanf("%C",&leitura.nome); 
+    printf("\n Informe o nome: ");
+    fflush(stdin);							
+	fgets(novo->nome, 30, stdin);	
+
     printf("\n Informe o Idade: ");
-    scanf("%d",&leitura.idade); 
+    scanf("%d", &leitura.idade); 
     printf("\n Informe o peso: ");
     scanf("%f",&leitura.peso); 
     printf("\n Informe a altura: ");
     scanf("%f",&leitura.altura); 
    
     novo->codigo = leitura.codigo;
-    //novo->nome   = leitura.nome;
+    novo->idade  = leitura.idade;
     novo->peso   = leitura.peso;
     novo->altura = leitura.altura;
     
@@ -100,31 +87,80 @@ void insereNaLista() {
   else printf("ERRO de alocacao de memoria!");
 }
 
-
-void imprimeLista() {
-  struct Agenda * aux;
+//Busca e imprime pessoa
+void imprimeLista(int valor) {
+  struct Agenda * busca;
+  bool achou;
 
   if (listaAgenda != NULL) {
-    aux = listaAgenda;
-    
-    while (aux != NULL) {
-      printf ("\n Codigo: %d", aux->codigo);
-      //printf ("\n Nome: %c", aux->nome);
-      printf ("\n Idade: %d", aux->idade);
-      printf ("\n Peso: %f",  aux->peso);
-      printf ("\n Altura: %f", aux->peso);
-      aux = aux->proximo;
-    }
+    busca = listaAgenda;
+	     if (busca->codigo == valor){	
+	      printf ("\n Codigo: %d", busca->codigo);
+	      printf ("\n Nome: %s",  busca->nome);
+	      printf ("\n Idade: %d", busca->idade);
+	      printf ("\n Peso: %f",  busca->peso);
+	      printf ("\n Altura: %f", busca->altura);
+	      achou = true;
+	     }else {
+	     	busca = busca->proximo;
+	     	achou = false
+		 }
   }
   else printf("Lista esta vazia!");
+  if (achou == false) {
+  	  printf("Pessoa nao cadastrada");
+  }
+}
+
+//Remove pessoa da lista
+void removeLista(int valor) {
+   struct Agenda * aux1, * aux2;
+
+
+   if (listaAgenda != NULL) {  
+ 
+     aux1 = listaAgenda;          
+     aux2 = listaAgenda->proximo; 
+
+     if (aux1->codigo == valor) {
+       if (aux1->proximo != NULL) {
+         aux2->anterior = NULL;  
+         listaAgenda = aux2;  
+       }
+      free(aux1);
+     }
+     
+     else while (aux2 != NULL && aux2->codigo != valor)
+     {
+       aux1 = aux2;
+       aux2 = aux2->proximo;
+       if (aux2 != NULL) {
+         aux1->proximo = aux2->proximo;
+        if (aux2->proximo != NULL) 
+          aux2->proximo->anterior = aux1;
+        free (aux2);
+       }
+    } 
+  }
+}
+
+//Detroi Lista
+void destroiLista() {
+  struct Agenda * aux;
+
+  while (listaAgenda != NULL) { 
+    aux = listaAgenda;  
+    listaAgenda = listaAgenda->proximo; 
+    free(aux); 
+  }
 }
 
 
-
-//progoram principal
+//Progrma principal
 int main (){
 
- int opcao;
+ int opcao, codigo;
+ char ok;
    
    menu();
    
@@ -140,34 +176,42 @@ int main (){
           }break;
           
           case 2:{
-                       insereNaLista();	
+                       insereLista();	
                        menu();
           }break;
           
-           case 3:{
-                       imprimeLista();
-					   getch();	
-                       menu();
+           case 3:{    printf("Informe o codigo da Pessoa: ");
+                       scanf ("%d", &codigo);
+                       if ((codigo < 0) || (codigo > 50)){
+                       	printf("Codigo entre 1 e 50!");
+					   }else{
+					         imprimeLista(codigo);
+                            
+					   }
+		              getch();
+                      menu();
           }break;
      
      
           case 4:{
-                       //remover;
-                        getch();	
-                        menu();
+		              printf("Informe o codigo que sera removido: ");
+                      scanf ("%d", &codigo);
+                       if ((codigo < 0) || (codigo > 50)){
+                       	printf("Codigo entre entre 1 e 50!");
+					   }else{ 
+					      removeLista(codigo);
+					    }
+                      menu();
           }break;
           case 5:{
-                       //liberar;
-                       //free()
-                        menu();
+                        destroiLista;
+                        return 0;
           }break;
     
          default: 
          break;
-       };
+       }
     
  }
-  return 0;
-};
-
+}
 
