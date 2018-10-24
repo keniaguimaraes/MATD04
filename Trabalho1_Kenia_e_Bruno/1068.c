@@ -28,13 +28,14 @@ int main(){
 	int sair;//flag saida
 
 	ExpPilha	pilhaExp;
-	TExpressao * aux;
+	TExpressao *aux;
 	
 	while (scanf("%s", expressao) != EOF) //enquanto expressao for <> nulo
 	{
 		pilhaExp.topo = NULL;
-		pilhaExp.qtd = c;
-		sair = 0;  //
+		pilhaExp.qtd = 0; 
+		c    =	0;
+		sair = 0;
 
 		do
 		{
@@ -53,7 +54,7 @@ int main(){
 				pilhaExp.qtd++; //conta a qtd de (
 			}
 
-			if(exp[c] == ')') //achou a )
+			if(expressao[c] == ')') //achou a )
 
 			{
 				if(pilhaExp.topo == NULL)
