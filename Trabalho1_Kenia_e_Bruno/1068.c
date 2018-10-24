@@ -50,7 +50,7 @@ int main(){
 				aux->prox = pilhaExp.topo;
 
 				pilhaExp.topo = aux;
-				pilhaExp.qtd++;
+				pilhaExp.qtd++; //conta a qtd de (
 			}
 
 			if(exp[c] == ')') //achou a )
@@ -73,7 +73,11 @@ int main(){
 			c++;
 		} while (c < strlen(expressao));
 
-	
+		if ((sair ==1) || pilhaExp.qtd != 0)
+			printf("incorrect\n");
+
+		else
+			printf("correct\n");
 	}
 
 	return 0;
