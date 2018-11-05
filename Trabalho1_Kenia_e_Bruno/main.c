@@ -38,11 +38,11 @@ void criaLista() {
 //Menu
 void menu(){
    system("cls");	
-   printf("1- Criar \n");	
-   printf("2- Inserir \n");	
-   printf("3- Consultar \n");	
-   printf("4- Remover \n");
-   printf("5- Encerrar \n");	
+   printf("1. Criar Lista \n");	
+   printf("2. Cadastra Pessoa \n");	
+   printf("3. Consulta Pessoa \n");	
+   printf("4. Remove Pessoa \n");
+   printf("5. Encerrar \n");	
 }
 
 //Insere na lista
@@ -90,27 +90,35 @@ void insereLista() {
 //Busca e imprime pessoa
 void imprimeLista(int valor) {
   struct Agenda * busca;
-  bool achou;
-
-  if (listaAgenda != NULL) {
-    busca = listaAgenda;
+  int achou=0;
+   
+  if (listaAgenda !=NULL){
+  
+   busca = listaAgenda;
+   
+    while (busca != NULL ) { 
 	     if (busca->codigo == valor){	
 	      printf ("\n Codigo: %d", busca->codigo);
 	      printf ("\n Nome: %s",  busca->nome);
 	      printf ("\n Idade: %d", busca->idade);
 	      printf ("\n Peso: %f",  busca->peso);
 	      printf ("\n Altura: %f", busca->altura);
-	      achou = true;
-	     }else {
-	     	busca = busca->proximo;
-	     	achou = false
-		 }
+	      achou =1;
+	    }
+	     busca = busca->proximo;
+    }
   }
-  else printf("Lista esta vazia!");
-  if (achou == false) {
-  	  printf("Pessoa nao cadastrada");
-  }
+   else{
+   	printf("Lista esta vazia!");
+   } 
+  
+   if ((achou == 0) && (listaAgenda != NULL)) {
+ 	  printf("\n Pessoa nao cadastrada");
+   }
 }
+
+
+
 
 //Remove pessoa da lista
 void removeLista(int valor) {
