@@ -1,277 +1,179 @@
-//Trabalho Estrutura de Dados .
-//Alunos:Bruno Vasconcelos e Kenia Guimarães.
+/*//Segundo Trabalho de Estrutura de Dados .
+//Alunos:Bruno Vasconcelos e Kenia Guimarães.*/
 
 #include <stdio.h>
 #include <stdlib.h>
 
 
-//Declaração de variaveis e estruturas.
-struct Arvore {
-  int    numero;
-  int    contador;
-  struct Arvore * esq;
-  struct Arvore * dir;
-  struct Arvore *pai;
-};
-struct Arvore *arvoreBinaria; 
+//Estruturas e variaveis 
+typedef struct Arvore  
+{
+  int dado;
+  struct Arvore * arvore_dir;
+  struct Arvore * arvore_esq;
+} abb;
 
 
-//Declaração de procedimentos.
 
-//Menu
+//Procedimentos e funções
+
+//função  que cria a arvore
+abb * criaArvore() {
+  printf("\nArvore criada!");
+  getch();
+  return NULL;
+}
+
+//exibe menu
 void menu(){
    system("cls");	
-   printf("1. Cria Arvore \n");	
-   printf("2. Insere Registro \n");	
-   printf("3. Consulta Registro \n");	
-   printf("4. Remove Registro \n");
-   printf("5. Encerrar \n");	
+   printf("1. Criar arvore \n");
+   printf("2. Destruir arvore \n");
+   printf("3. Inserir na arvore \n");
+   printf("4. Consultar arvore \n");
+   printf("5. Remover da arvore \n");
+   printf("0. Sair \n");
 }
 
-void criaArvore(){
-	
-	arvoreBinaria = NULL;
-}
 
-void insere(){
-    struct Arvore *aux1, *aux2;
-    int n;
+//função que insere na arvore
+void insereArvore(abb ** arv, int num) {
 
-    printf("Digite o numero a inserir: ");
-    scanf("%d", &n);
+    if (*arv == NULL) {
+       *arv = (abb *) malloc(sizeof(abb));
+       (*arv)->dado = num;
+       (*arv)->arvore_esq = NULL;
+       (*arv)->arvore_dir = NULL;
+     } 
+     else {
   
-    if(!arvoreBinaria){
-        arvoreBinaria = (struct Arvore*) malloc(sizeof(struct Arvore));
+        if(num < (*arv)->dado)
+          insereArvore(&(*arv)->arvore_esq, num);
 
-        if(!arvoreBinaria){
-            printf("Erro ao alocar =(\n");
-            exit(1);
-        }
-
-        arvoreBinaria->numero = n;
-        arvoreBinaria->esq = NULL;
-        arvoreBinaria->dir = NULL;
-        arvoreBinaria->pai = NULL;
-    }
-
-    else{
-        aux1 = arvoreBinaria;
-        aux2 = aux1;
-
-        while(aux2){
-            if(n < aux2->numero){
-                aux2 = aux2->esq;
-
-                if(!aux2){
-                    aux1->esq = (struct Arvore*) malloc(sizeof(struct Arvore));
-
-                    if(!aux1->esq){
-                        printf("Erro ao alocar =(\n");
-                        exit(1);
-                    }
-
-                    aux2 = aux1->esq;
-
-                    aux2->esq = NULL;
-                    aux2->dir = NULL;
-                    aux2->pai = aux1;
-                    aux2->numero = n;
-                    aux2 = NULL;
-                }
-                else{
-                    aux1 = aux2;
-                }
-            }
-
-            else{
-                aux2 = aux2->dir;
-
-                if(!aux2){
-                    aux1->dir = (struct Arvore*) malloc(sizeof(struct Arvore));
-
-                    if(!aux1->dir){
-                        printf("Erro ao alocar =(\n");
-                        exit(1);
-                    }
-
-                    aux2 = aux1->dir;
-
-                    aux2->esq = NULL;
-                    aux2->dir = NULL;
-                    aux2->pai = aux1;
-                    aux2->numero = n;
-                    aux2 = NULL;
-                }
-
-                else{
-                    aux1 = aux2;
-                }
-            }
-        }
-    }
-
-    printf("Elemento Inserido!\n");
-    getch();
-}
-
-struct Arvore* buscar(int n){
-    struct Arvore *aux;
-
-    aux = arvoreBinaria;
-
-    while(aux && aux->numero != n){
-        if(n < aux->numero){
-            aux = aux->esq;
-        }
-
-        else{
-            aux = aux->dir;
-        }
-    }
-
-    return aux;
-}
-
-struct Arvore* menor_dir(struct Arvore *aux){
-    while(aux->esq){
-        aux = aux->esq;
-    }
-
-    return aux;
-}
-
-void remover(struct Arvore *aux){
-    struct Arvore *aux2;
-
-    if(aux != arvoreBinaria){
-        if(!aux->esq && !aux->dir){
-            if(aux->numero < aux->pai->numero){
-                aux->pai->esq = NULL;
-            }
-            else{
-                aux->pai->dir = NULL;
-            }
-
-            free(aux);
-        }
-
-        else if(!aux->dir){
-            if(aux->numero < aux->pai->numero){
-                aux->pai->esq = aux->esq;
-            }
-            else{
-                aux->pai->dir = aux->esq;
-            }
-            aux->esq->pai = aux->pai;
-            free(aux);
-        }
-
-        else if(!aux->esq){
-            if(aux->numero < aux->pai->numero){
-                aux->pai->esq = aux->dir;
-            }
-            else{
-                aux->pai->dir = aux->dir;
-            }
-            aux->dir->pai = aux->pai;
-            free(aux);
-        }
-
-        else{
-            aux2 = menor_direita(aux->dir);
-            aux->numero = aux2->numero;
-
-            remover(aux2);
-        }
-    }
-
-    else{
-        if(!aux->esq && !aux->dir){
-            free(aux);
-            arvoreBinaria = NULL;
-        }
-
-        else if(!aux->dir){
-            aux->esq->pai = NULL;
-            arvoreBinaria = aux->esq;
-            free(aux);
-        }
-
-        else if(!aux->esq){
-            aux->dir->pai = NULL;
-            arvoreBinaria = aux->dir;
-            free(aux);
-        }
-
-        else{
-            aux2 = menor_direita(aux->dir);
-            aux->numero = aux2->numero;
-
-            remover(aux2);
-        }
-    }
-}
-
-void remove_p(){
-    struct Arvore *aux;
-    int n;
-
-    printf("Informe o numero para remover: ");
-    scanf("%d", &n);
-
-    aux = buscar(n);
-
-    if(aux){
-        remover(aux);
-    }
-
-    else{
-        printf("O numero nao consta na arvore!\n");
-    }
-}
-
-
-
-//Progrma principal
-int main() {
-  int opcao = -1;
-  int n;
-struct Arvore *busca;
-  do {
-       menu();
-       printf("Informe a Opcao: ");
-       scanf("%d", &opcao);
-       switch(opcao) {
+        if(num > (*arv)->dado)
+          insereArvore(&(*arv)->arvore_dir, num);
+          
+        if (num == (*arv)->dado){
+	      printf("O numero ja foi inserido! ");	
+	      getch();
+		}  
          
-		 case 1:  criaArvore();
-         		  break;
-				 
-         case 2:  insere();
-   		          break;
-				 
-         case 3:  printf("Informe o numero: ");
-                  scanf("%d", &n);
-      
-                  busca = buscar(n);
-
-                  if(busca){
-                        printf("Numero encontrado: %d\n", busca->numero);
-                  }else{
-                        printf("Numero nao encontrado!\n");
-                 }
-
-                 getch();
-		         break;
-				
-         case 4:  remove_p();
-                  printf("Numero removido!\n");
-                  getch();
-		          break;
-		        
-         case 5:   return 0; 
-		           break;
-        }
-  } while (opcao != 0);
-
+     }
 }
 
+//função que exibe precurso pre ordem
+void consultaPreOrdem(abb * arv) {
+  if (arv != NULL) {
+  	 printf("%d",arv->dado);
+    consultaPreOrdem(arv->arvore_esq);   
+	consultaPreOrdem(arv->arvore_dir); 
+  }
+}
+
+//função que exibe percurso pos ordem
+void consultaPosOrdem(abb * arv) {
+  if (arv != NULL) {
+    consultaPosOrdem(arv->arvore_dir);   
+    printf("%d",arv->dado);
+	consultaPosOrdem(arv->arvore_esq); 
+  }
+}
+
+//função que exibe percurso em ordem
+void consultaArvore(abb * arv) {
+  if (arv != NULL) {
+    consultaArvore(arv->arvore_esq);   
+    printf("%d",arv->dado);
+	consultaArvore(arv->arvore_dir); 
+  }
+}
+
+//função que destroi arvore
+void destroiArvore(abb *arv){
+		free(arv);
+		printf("Arvore Destruida!");
+		getch();
+}
+
+
+abb * nodoMenorValor(abb * arv){
+     abb * aux = arv;
+    while (aux->arvore_esq != NULL)
+        aux = aux->arvore_esq;
+    return aux;
+}
+
+//função que remove numero da arvore
+abb * removeArvore(abb * arv, int num) {
+
+      if (arv == NULL) return arv;
+      if (num < arv->dado)
+          arv->arvore_esq = removeArvore(arv->arvore_esq, num);
+  
+      else if (num > arv->dado)
+          arv->arvore_dir = removeArvore(arv->arvore_dir, num);
+      else
+      {   
+          if (arv->arvore_esq == NULL)
+          {
+              abb * temp = arv->arvore_dir;
+              free(arv);
+              return temp;
+          }
+          else if (arv->arvore_dir == NULL)
+          {
+              abb * temp = arv->arvore_esq;
+              free(arv);
+              return temp;
+          }
+           abb * temp = nodoMenorValor(arv->arvore_dir);
+           arv->dado = temp->dado;
+         
+          arv->arvore_dir = removeArvore(arv->arvore_dir, temp->dado);
+      }
+      return arv;
+  }
+
+
+//Programa Principal
+int main() {
+  int op, num;
+  abb * p_arvore;  
+
+  do {
+    menu();
+    printf("Informe a opcao: ");
+    scanf("%d",&op);
+    switch (op) {
+      
+      case 1: p_arvore = criaArvore();
+	          break;
+      case 2: destroiArvore(p_arvore);
+	          break;
+      case 3: {
+		        printf("Informe o numero: ");
+			    scanf("%d",&num);
+		        insereArvore(&p_arvore,num);
+               } break;
+      case 4: {
+      	        printf("Em Ordem\n");
+      	        consultaArvore(p_arvore);
+		       	printf("\nPre Ordem\n");
+		      	consultaPreOrdem(p_arvore);
+		      	printf("\nPos Ordem\n");
+		      	consultaPosOrdem(p_arvore);
+		      	getch();
+				
+	          }break;
+      case 5: {
+		      	 printf("Informe o numero: ");
+			     scanf("%d",&num);
+			     removeArvore(p_arvore,num);
+              }break;
+              
+      case 0:return 0;
+    } 
+  } while (op!=0);
+
+
+ }
