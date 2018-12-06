@@ -4,8 +4,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <conio.h>
 
 //Declaração de variaveis e estruturas.
+#define tamanho  100
+
+int  vetor[tamanho];
 
 //Declaração de procedimentos.
 
@@ -22,6 +26,27 @@ void menu(){
   printf("5. Sair do programa\n");	   
 }
 
+
+void geraConjunto(){
+int i;
+for (i=0; i<tamanho; i++)
+   vetor[i]	= rand() % tamanho;
+}
+void pesquisaSeq(){
+  int i,numero, achou;
+  achou = 0;
+  printf("Informe um numero: ");
+  scanf("%d",&numero);
+  for (i=0; i<tamanho; i++) {
+   if (vetor[i]==numero){
+    printf("Valor encontrado na posição %d", i);
+    achou=1;
+    getch;
+   }
+ }
+ if (achou != 0)
+  printf("Valor não encontrado!");
+}
 //Progrma principal
 int main() {
   int opcao = -1;
@@ -33,7 +58,7 @@ int main() {
        scanf("%d", &opcao);
        switch(opcao) {
          
-		 case 1: 
+		 case 1: geraConjunto();
          		  break;
 				 
          case 2: 
