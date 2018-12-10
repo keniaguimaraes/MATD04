@@ -23,22 +23,22 @@ int c;
 
 //Menu
 void menu(){
-  system("clear");	
-  printf(" 1. Geracao do conjunto de dados\n");	
-  printf(" 2. Pesquisa sequencial\n");	
-  printf(" 3. Ordenacao\n");	
-  printf("   a. Insercao direta\n");	
-  printf("   b. Troca\n");	
-  printf("   c. Selecao\n");	
-  printf(" 4. Pesquisa binaria\n");	
-  printf(" 5. Sair do programa\n");	   
+  system("cls");
+  printf(" 1. Geracao do conjunto de dados\n");
+  printf(" 2. Pesquisa sequencial\n");
+  printf(" 3. Ordenacao\n");
+  printf("   a. Insercao direta\n");
+  printf("   b. Troca\n");
+  printf("   c. Selecao\n");
+  printf(" 4. Pesquisa binaria\n");
+  printf(" 5. Sair do programa\n");
 }
 
 
 void geraConjunto(){
-
+ int i=0;
  srand(tamanho);
- for (int i=0; i<tamanho; i++)
+ for(i=0; i<tamanho; i++)
    vetor[i]	= rand() % valrand;
 }
 
@@ -78,9 +78,9 @@ void bublleshort(){
       
   for( x = 0; x < tamanho; x++ )
   {
-    for( y = x + 1; y < tamanho; y++ ) // sempre 1 elemento Ã  frente
+    for( y = x + 1; y < tamanho; y++ ) // sempre 1 elemento à frente
     {
-      // se o (x > (x+1)) entÃ£o o x passa pra frente (ordem crescente)
+      // se o (x > (x+1)) então o x passa pra frente (ordem crescente)
       if ( vetor[x] > vetor[y] )
       {
          aux = vetor[x];
@@ -102,6 +102,30 @@ void bublleshort(){
   
 }
 
+void pesquisaBin(){
+  int esq = 0, meio, dir = tamanho-1, numero, achou;
+  achou = 0;
+  printf("Informe um numeroo: ");
+  scanf("%d",&numero);
+
+  
+  while(esq <= dir){
+  	meio = (esq+dir)/2;
+  	if(numero == vetor[meio]) {
+	  achou = 1;
+	  printf("valor entontrado na posicao %d\n", meio);
+	  break;
+	  }
+  	else if(numero < vetor[meio]) dir = meio-1;
+  	else if(numero > vetor[meio]) esq = meio+1;
+  }
+ 
+ if (achou !=1){
+  printf("Valor nao encontrado!\n");
+ }
+ scanf("%d", &c);
+}
+
 //Progama principal
 int main() {
   int opcao = -1;
@@ -120,25 +144,29 @@ int main() {
          case 2: pesquisaSeq();
    		          break;
 				 
-         case 3: { 
-			       //consertar essa chamada de menu
-			       printf("\n Informe a letra: ");
-                   scanf("%c", &op);
-                   if (op == 'a'){
-					printf("Nao implementado!\n");
-					} else if (op == 'a'){  
-					   bublleshort();break;
-					 } else { printf("\n Nao implementado\n"); }
-				   			 
-		         }break;
-				
-         case 4:  break;
+         case 3: 
+			    printf("\n Informe a letra: ");
+                scanf(" %c", &op);
+			    
+                switch(op){ 
+                case 'a': printf("Nao implementado!\n");
+                          break;
+                          
+                case 'b': bublleshort();
+                          break;
+				   
+                case 'c': printf("\n Nao implementado\n");
+                          break;
+			}
+			break;
+          				
+         case 4:  pesquisaBin();
+                  break;  
 		        
          case 5:   return 0; 
 		           break;
         }
+    
   } while (opcao != 0);
 
 }
-
-
